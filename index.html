@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ease — Drink less. Feel more.</title>
+  <meta name="description" content="A personal alcohol reduction plan built around how you actually drink. Track real units, save money, and cut back at your own pace. Free, private, no account needed." />
+  <link rel="icon" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #F8F7FF;
+      color: #18181B;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Tokens ───────────────────────────────────────────────── */
+    :root {
+      --indigo:    #4F46E5;
+      --violet:    #7C3AED;
+      --bg:        #F8F7FF;
+      --card:      #FFFFFF;
+      --border:    #E4E4E7;
+      --text:      #18181B;
+      --mid:       #52525B;
+      --light:     #A1A1AA;
+      --tint-bg:   #EEF2FF;
+      --tint-bdr:  #A5B4FC;
+      --success:   #059669;
+      --success-bg:#ECFDF5;
+    }
+
+    /* ── Utilities ────────────────────────────────────────────── */
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--tint-bg); color: var(--indigo);
+      font-size: 11px; font-weight: 800; letter-spacing: 1.2px;
+      text-transform: uppercase; padding: 6px 12px; border-radius: 4px;
+    }
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .section-label { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--indigo); margin-bottom: 14px; }
+    .section-h2 { font-size: clamp(30px, 4vw, 46px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; color: var(--text); margin-bottom: 14px; }
+    .section-sub { font-size: 16px; line-height: 1.7; color: var(--mid); }
+
+    /* ── NAV ──────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(248,247,255,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--indigo), var(--violet));
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .logo-bars { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; padding: 0 2px; }
+    .logo-bar  { background: white; border-radius: 99px; height: 3.5px; }
+    .nav-logo-name { font-size: 18px; font-weight: 800; color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--mid); transition: color .2s; }
+    .nav-links a:hover { color: var(--indigo); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; text-decoration: none; transition: opacity .2s, transform .15s; cursor: pointer; border: none; }
+    .btn:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-primary { background: var(--indigo); color: white; }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero { padding: 96px 0 80px; position: relative; overflow: hidden; }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(79,70,229,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .hero-eyebrow { margin-bottom: 24px; }
+    .hero-h1 { font-size: clamp(46px, 6vw, 72px); font-weight: 900; line-height: 1.0; letter-spacing: -2px; color: var(--text); margin-bottom: 22px; }
+    .hero-h1 em { font-style: normal; color: var(--indigo); }
+    .hero-sub { font-size: 18px; line-height: 1.65; color: var(--mid); margin-bottom: 40px; max-width: 420px; }
+    .hero-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .app-store-btn {
+      display: inline-flex; align-items: center; gap: 11px;
+      background: #18181B; color: white; padding: 13px 22px;
+      border-radius: 14px; text-decoration: none; transition: transform .2s, box-shadow .2s;
+    }
+    .app-store-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(0,0,0,0.22); }
+    .app-store-text { display: flex; flex-direction: column; }
+    .app-store-label { font-size: 10px; font-weight: 500; opacity: .7; letter-spacing: .5px; }
+    .app-store-name  { font-size: 17px; font-weight: 800; }
+    .hero-note { font-size: 13px; color: var(--light); font-weight: 500; }
+    .hero-right { display: flex; justify-content: center; }
+
+    /* ── PHONE FRAMES ─────────────────────────────────────────── */
+    /* Large hero phone */
+    .phone-wrap {
+      filter: drop-shadow(0 48px 96px rgba(79,70,229,0.25)) drop-shadow(0 16px 40px rgba(0,0,0,0.18));
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .phone {
+      width: 295px; background: #0A0A0F; border-radius: 52px;
+      padding: 15px; position: relative; border: 1.5px solid #27272A;
+    }
+    .phone::before {
+      content: ''; position: absolute; top: 17px;
+      left: 50%; transform: translateX(-50%);
+      width: 96px; height: 30px; background: #0A0A0F; border-radius: 22px; z-index: 10;
+    }
+    .phone-screen {
+      width: 100%; border-radius: 38px; overflow: hidden;
+      background: #F8F7FF; aspect-ratio: 390/844;
+    }
+    .phone-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+    /* Small phones in steps */
+    .phone-sm {
+      width: 248px; background: #0A0A0F; border-radius: 44px;
+      padding: 13px; position: relative; border: 1.5px solid #27272A;
+      filter: drop-shadow(0 28px 56px rgba(79,70,229,0.2)) drop-shadow(0 8px 24px rgba(0,0,0,0.14));
+    }
+    .phone-sm::before {
+      content: ''; position: absolute; top: 15px;
+      left: 50%; transform: translateX(-50%);
+      width: 82px; height: 26px; background: #0A0A0F; border-radius: 18px; z-index: 10;
+    }
+    .phone-sm .phone-screen { border-radius: 32px; }
+
+    /* ── FEATURES STRIP ───────────────────────────────────────── */
+    .features-strip { padding: 80px 0; border-top: 1px solid var(--border); }
+    .features-grid  { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .feature-card   { padding: 32px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+    .feature-icon-wrap {
+      width: 48px; height: 48px; border-radius: 10px; background: var(--tint-bg);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .feature-icon-wrap svg { width: 24px; height: 24px; stroke: var(--indigo); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .feature-title { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+    .feature-desc  { font-size: 14px; line-height: 1.65; color: var(--mid); }
+
+    /* ── HOW IT WORKS ─────────────────────────────────────────── */
+    .hiw { padding: 80px 0; }
+    .hiw-head { text-align: center; margin-bottom: 80px; }
+    .hiw-step { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 100px; }
+    .hiw-step:last-child { margin-bottom: 0; }
+    .hiw-step.reverse { direction: rtl; }
+    .hiw-step.reverse > * { direction: ltr; }
+    .phone-col { display: flex; justify-content: center; }
+    .step-num  { font-size: 72px; font-weight: 900; color: var(--tint-bg); letter-spacing: -4px; line-height: 1; margin-bottom: 4px; }
+    .step-title { font-size: 28px; font-weight: 900; letter-spacing: -.8px; margin-bottom: 14px; }
+    .step-desc  { font-size: 16px; line-height: 1.7; color: var(--mid); margin-bottom: 28px; }
+    .step-bullets { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .step-bullets li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--mid); line-height: 1.5; }
+    .bullet-dot {
+      width: 20px; height: 20px; border-radius: 99px; background: var(--tint-bg);
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+    .bullet-dot svg { width: 10px; height: 10px; stroke: var(--indigo); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── PHILOSOPHY ───────────────────────────────────────────── */
+    .philosophy { background: #18181B; padding: 100px 0; }
+    .philosophy-inner { text-align: center; max-width: 740px; margin: 0 auto; }
+    .philosophy blockquote { font-size: clamp(22px, 4vw, 40px); font-weight: 800; line-height: 1.3; letter-spacing: -1px; color: white; margin-bottom: 28px; }
+    .philosophy blockquote em { font-style: normal; color: #818CF8; }
+    .philosophy-sub { font-size: 16px; color: rgba(255,255,255,.45); line-height: 1.7; }
+
+    /* ── SCREENSHOTS GALLERY ──────────────────────────────────── */
+    .gallery { padding: 80px 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; }
+    .gallery-head { text-align: center; margin-bottom: 64px; }
+    .gallery-phones {
+      display: flex; gap: 32px; justify-content: center; align-items: flex-start;
+      flex-wrap: nowrap;
+    }
+    .gallery-phone-wrap { flex-shrink: 0; }
+    .gallery-phone-wrap:nth-child(2) { margin-top: -24px; }
+    .gallery-phone-wrap:nth-child(3) { margin-top: 24px; }
+    .gallery-phone-wrap:nth-child(4) { margin-top: -12px; }
+    .gallery-phone {
+      width: 220px; background: #0A0A0F; border-radius: 40px;
+      padding: 12px; position: relative; border: 1.5px solid #27272A;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.18)) drop-shadow(0 8px 20px rgba(79,70,229,0.14));
+    }
+    .gallery-phone::before {
+      content: ''; position: absolute; top: 14px;
+      left: 50%; transform: translateX(-50%);
+      width: 72px; height: 22px; background: #0A0A0F; border-radius: 14px; z-index: 10;
+    }
+    .gallery-phone .phone-screen { border-radius: 28px; }
+    .gallery-label { text-align: center; margin-top: 16px; font-size: 12px; font-weight: 600; color: var(--light); }
+
+    /* ── BUILT BY / SUPPORTER ─────────────────────────────────── */
+    .built-by { padding: 80px 0; }
+    .built-by-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 56px; display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: center;
+    }
+    .built-by-h { font-size: 30px; font-weight: 900; letter-spacing: -.8px; margin-bottom: 16px; }
+    .built-by-p { font-size: 16px; line-height: 1.75; color: var(--mid); max-width: 520px; margin-bottom: 28px; }
+    .built-by-meta { display: flex; gap: 20px; flex-wrap: wrap; }
+    .meta-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--mid); }
+    .meta-dot { width: 18px; height: 18px; border-radius: 9px; background: var(--tint-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .meta-dot svg { width: 9px; height: 9px; stroke: var(--indigo); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .price-card {
+      background: var(--tint-bg); border: 1.5px solid var(--tint-bdr);
+      border-radius: 16px; padding: 36px 32px; text-align: center; min-width: 210px;
+    }
+    .price-label  { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--indigo); margin-bottom: 10px; }
+    .price-amount { font-size: 44px; font-weight: 900; letter-spacing: -2px; color: var(--text); margin-bottom: 4px; }
+    .price-note   { font-size: 12px; color: var(--light); margin-bottom: 24px; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .price-features li { font-size: 13px; color: var(--mid); display: flex; align-items: center; gap: 9px; }
+    .price-check { width: 18px; height: 18px; border-radius: 9px; background: var(--indigo); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .price-check svg { width: 9px; height: 9px; stroke: white; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-left  { display: flex; align-items: center; gap: 12px; }
+    .footer-logo  { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, var(--indigo), var(--violet)); display: flex; align-items: center; justify-content: center; }
+    .footer-name  { font-size: 15px; font-weight: 800; color: var(--text); }
+    .footer-copy  { font-size: 13px; color: var(--light); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--light); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--indigo); }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-grid, .hiw-step, .hiw-step.reverse, .features-grid, .built-by-card { grid-template-columns: 1fr; direction: ltr; }
+      .hero-right { display: none; }
+      .hiw-step { gap: 40px; }
+      .built-by-card { padding: 32px 24px; }
+      .nav-links { display: none; }
+      .phone-col { order: -1; }
+      .gallery-phones { gap: 16px; }
+      .gallery-phone { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────── -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">
+          <div class="logo-bars">
+            <div class="logo-bar" style="width:18px"></div>
+            <div class="logo-bar" style="width:13px"></div>
+            <div class="logo-bar" style="width:8px"></div>
+          </div>
+        </div>
+        <span class="nav-logo-name">Ease</span>
+      </a>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#support">Support</a>
+      </div>
+      <a href="#download" class="btn btn-primary">Download free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="fade-up">
+        <div class="hero-eyebrow"><span class="tag">Free · Private · No account needed</span></div>
+        <h1 class="hero-h1">Drink less.<br><em>Feel more.</em></h1>
+        <p class="hero-sub">A personal reduction plan built around how you actually drink — not how you wish you did. Track real units, cut back gradually, and watch the money add up.</p>
+        <div class="hero-ctas" id="download">
+          <a href="#" class="app-store-btn">
+            <svg width="20" height="24" viewBox="0 0 20 24" fill="white"><path d="M16.462 12.617c-.025-3.032 2.484-4.503 2.594-4.57-1.414-2.069-3.614-2.351-4.397-2.383-1.877-.19-3.67 1.107-4.622 1.107-.955 0-2.43-1.08-3.99-1.05-2.056.031-3.956 1.193-5.015 3.024-2.14 3.713-.549 9.199 1.537 12.208 1.021 1.475 2.228 3.127 3.82 3.067 1.539-.063 2.118-.988 3.978-.988 1.862 0 2.395.988 4.02.957 1.655-.028 2.698-1.499 3.71-2.981a15.53 15.53 0 001.677-3.44c-.04-.014-3.31-1.267-3.312-5.05zm-3.1-9.28C14.33 2.147 15.017.546 14.82 0c-1.155.046-2.55.77-3.376 1.746-.742.857-1.39 2.225-1.216 3.535 1.292.1 2.61-.655 3.135-1.944z"/></svg>
+            <div class="app-store-text">
+              <span class="app-store-label">Download on the</span>
+              <span class="app-store-name">App Store</span>
+            </div>
+          </a>
+          <span class="hero-note">Coming soon — iOS</span>
+        </div>
+      </div>
+      <div class="hero-right fade-up" style="transition-delay:.15s">
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-screen">
+              <img src="screens/today.png" alt="Ease app — Today screen" loading="eager" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ──────────────────────────────────────────────────── -->
+<section class="features-strip">
+  <div class="container">
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="feature-title">Tracks real units, not just drinks</div>
+        <div class="feature-desc">Every drink gets its own ABV and volume. A 10% craft IPA counts more than a light lager — and your plan knows it.</div>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.1s">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="feature-title">Gradual reduction — no cold turkey</div>
+        <div class="feature-desc">Your plan cuts by one step at a time. Progress is real, not brutal. No willpower required — just consistency.</div>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.2s">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div class="feature-title">Watch the money add up</div>
+        <div class="feature-desc">Every logged evening tracks exactly how much you've saved. Most people are surprised by the number within the first week.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────────────── -->
+<section class="hiw" id="how-it-works">
+  <div class="container">
+    <div class="hiw-head fade-up">
+      <div class="section-label">How it works</div>
+      <h2 class="section-h2" style="max-width:520px;margin:0 auto 14px">Three steps to a clearer head</h2>
+      <p class="section-sub">No sign-up. No cloud sync. Everything stays on your phone.</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="hiw-step fade-up">
+      <div class="phone-col">
+        <div class="phone-sm">
+          <div class="phone-screen">
+            <img src="screens/drink-setup.png" alt="Drink setup screen" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="step-num">01</div>
+        <div class="step-title">Tell us exactly what you drink</div>
+        <p class="step-desc">Add each drink in a session with its own ABV and volume. We don't judge — a 10% IPA and a 4% lager are different, and your plan should know that.</p>
+        <ul class="step-bullets">
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Every drink gets its own strength and price</li>
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Mix and match types — beer, wine, spirits, cocktails</li>
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Bar or home prices — auto-adjusted at 35%</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="hiw-step reverse fade-up">
+      <div class="phone-col">
+        <div class="phone-sm">
+          <div class="phone-screen">
+            <img src="screens/plan-preview.png" alt="Plan preview screen" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="step-num">02</div>
+        <div class="step-title">Get a plan that actually fits you</div>
+        <p class="step-desc">Ease builds a week-by-week reduction plan based on your real numbers — not a generic template. Each step is small enough to stick to.</p>
+        <ul class="step-bullets">
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Targets units — not just drink count</li>
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Choose full sobriety or moderate drinking</li>
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>See your target date from day one</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="hiw-step fade-up">
+      <div class="phone-col">
+        <div class="phone-sm">
+          <div class="phone-screen">
+            <img src="screens/progress.png" alt="Progress screen" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="step-num">03</div>
+        <div class="step-title">Log daily, watch the numbers move</div>
+        <p class="step-desc">Each evening, log how many you had. Your streak grows, your savings add up, and your unit count drops. Small wins compound fast.</p>
+        <ul class="step-bullets">
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Streak tracking — no broken chains</li>
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Real money saved, calculated daily</li>
+          <li><span class="bullet-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Health milestone timeline as you progress</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCREENSHOTS GALLERY ────────────────────────────────────────── -->
+<section class="gallery" id="screenshots">
+  <div class="container">
+    <div class="gallery-head fade-up">
+      <div class="section-label">Every screen</div>
+      <h2 class="section-h2">Designed around your journey</h2>
+      <p class="section-sub" style="max-width:480px;margin:0 auto">Every screen is built around one goal — making it as easy as possible to cut back, without making it feel like a chore.</p>
+    </div>
+    <div class="gallery-phones fade-up" style="transition-delay:.1s">
+      <div class="gallery-phone-wrap">
+        <div class="gallery-phone">
+          <div class="phone-screen"><img src="screens/today.png" alt="Today" loading="lazy"/></div>
+        </div>
+        <div class="gallery-label">Today</div>
+      </div>
+      <div class="gallery-phone-wrap">
+        <div class="gallery-phone">
+          <div class="phone-screen"><img src="screens/drink-setup.png" alt="Drink Setup" loading="lazy"/></div>
+        </div>
+        <div class="gallery-label">Drink setup</div>
+      </div>
+      <div class="gallery-phone-wrap">
+        <div class="gallery-phone">
+          <div class="phone-screen"><img src="screens/plan-preview.png" alt="Your Plan" loading="lazy"/></div>
+        </div>
+        <div class="gallery-label">Your plan</div>
+      </div>
+      <div class="gallery-phone-wrap">
+        <div class="gallery-phone">
+          <div class="phone-screen"><img src="screens/progress.png" alt="Progress" loading="lazy"/></div>
+        </div>
+        <div class="gallery-label">Progress</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHILOSOPHY ─────────────────────────────────────────────────── -->
+<section class="philosophy">
+  <div class="container">
+    <div class="philosophy-inner fade-up">
+      <blockquote>"Cutting back isn't about <em>willpower</em> — it's about having the right plan."</blockquote>
+      <p class="philosophy-sub">No shame. No lectures. No streak-breaking guilt trips. Ease is built on the belief that gradual, honest reduction beats any cold-turkey reset. Progress over perfection. Always.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── BUILT BY / SUPPORTER ───────────────────────────────────────── -->
+<section class="built-by" id="support">
+  <div class="container">
+    <div class="built-by-card fade-up">
+      <div>
+        <span class="tag" style="margin-bottom:20px;display:inline-flex">Supporter edition</span>
+        <h2 class="built-by-h">Built by someone who's been there.</h2>
+        <p class="built-by-p">Ease isn't a startup with a growth team and a subscription model. It's one app, built by one person who used gradual reduction to get sober. If it helps you — and you'd like to give something back — you can unlock journal notes for a one-time payment. No subscription. No guilt if you don't.</p>
+        <div class="built-by-meta">
+          <div class="meta-item">
+            <div class="meta-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Always free for the core app
+          </div>
+          <div class="meta-item">
+            <div class="meta-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            No account, no data collection
+          </div>
+          <div class="meta-item">
+            <div class="meta-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+            Your data never leaves your phone
+          </div>
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="price-label">Supporter</div>
+        <div class="price-amount">€3.99</div>
+        <div class="price-note">One-time · No subscription ever</div>
+        <ul class="price-features">
+          <li><div class="price-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Daily journal notes</li>
+          <li><div class="price-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Support one developer</li>
+          <li><div class="price-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Keep the app independent</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <div class="logo-bars">
+            <div class="logo-bar" style="width:14px"></div>
+            <div class="logo-bar" style="width:10px"></div>
+            <div class="logo-bar" style="width:6px"></div>
+          </div>
+        </div>
+        <span class="footer-name">Ease</span>
+        <span class="footer-copy">© 2026</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="#">Google Play</a>
+        <a href="mailto:angelobendrot@gmail.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

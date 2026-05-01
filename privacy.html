@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Ease</title>
+  <link rel="icon" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #F8F7FF;
+      color: #18181B;
+      -webkit-font-smoothing: antialiased;
+    }
+    :root {
+      --indigo: #4F46E5;
+      --violet: #7C3AED;
+      --bg:     #F8F7FF;
+      --card:   #FFFFFF;
+      --border: #E4E4E7;
+      --text:   #18181B;
+      --mid:    #52525B;
+      --light:  #A1A1AA;
+      --tint-bg:#EEF2FF;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(248,247,255,0.88); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--indigo), var(--violet));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-bars { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; padding: 0 2px; }
+    .logo-bar  { background: white; border-radius: 99px; height: 3.5px; }
+    .nav-logo-name { font-size: 18px; font-weight: 800; color: var(--text); }
+    .nav-back { font-size: 14px; font-weight: 600; color: var(--indigo); text-decoration: none; }
+    .nav-back:hover { opacity: .75; }
+
+    /* Content */
+    .page-header { padding: 64px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+    .page-label { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--indigo); margin-bottom: 14px; }
+    .page-title { font-size: clamp(32px, 5vw, 48px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+    .page-meta  { font-size: 14px; color: var(--light); }
+
+    .prose { padding-bottom: 80px; }
+    .prose section { margin-bottom: 40px; }
+    .prose h2 {
+      font-size: 19px; font-weight: 800; color: var(--text);
+      margin-bottom: 12px; letter-spacing: -.3px;
+    }
+    .prose p { font-size: 15px; line-height: 1.75; color: var(--mid); margin-bottom: 12px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    .prose ul li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; line-height: 1.65; color: var(--mid); }
+    .prose ul li::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--indigo); flex-shrink: 0; margin-top: 8px;
+    }
+    .prose a { color: var(--indigo); text-decoration: none; }
+    .prose a:hover { text-decoration: underline; }
+
+    .highlight-box {
+      background: var(--tint-bg); border-radius: 12px; padding: 20px 24px; margin-bottom: 12px;
+    }
+    .highlight-box p { color: var(--text); font-weight: 600; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-left  { display: flex; align-items: center; gap: 12px; }
+    .footer-logo  { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, var(--indigo), var(--violet)); display: flex; align-items: center; justify-content: center; }
+    .footer-name  { font-size: 15px; font-weight: 800; color: var(--text); }
+    .footer-copy  { font-size: 13px; color: var(--light); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--light); text-decoration: none; }
+    .footer-links a:hover { color: var(--indigo); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container" style="max-width:1120px">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <div class="logo-bars">
+            <div class="logo-bar" style="width:16px"></div>
+            <div class="logo-bar" style="width:11px"></div>
+            <div class="logo-bar" style="width:7px"></div>
+          </div>
+        </div>
+        <span class="nav-logo-name">Ease</span>
+      </a>
+      <a href="index.html" class="nav-back">← Back to home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-label">Legal</div>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="page-meta">Last updated: May 2026</p>
+  </div>
+
+  <div class="prose">
+
+    <section>
+      <div class="highlight-box">
+        <p>Ease does not collect, store, or transmit any personal data to any server. Everything stays on your phone.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Who we are</h2>
+      <p>Ease is an alcohol reduction app built and maintained independently. If you have any questions about this policy, contact us at <a href="mailto:angelobendrot@gmail.com">angelobendrot@gmail.com</a>.</p>
+    </section>
+
+    <section>
+      <h2>What data the app stores</h2>
+      <p>Ease stores the following data <strong>locally on your device only</strong>, using your phone's built-in storage:</p>
+      <ul>
+        <li>Your drink profile (the types of drinks and their ABV and price you entered during onboarding)</li>
+        <li>Your weekly reduction plan (generated locally on your device)</li>
+        <li>Your daily drink logs and whether you hit your target each day</li>
+        <li>Optional journal notes you write (if you've unlocked the supporter feature)</li>
+        <li>Your notification preferences (whether reminders are enabled and at what time)</li>
+        <li>Your supporter status</li>
+      </ul>
+      <p>This data never leaves your phone. We have no servers, no accounts, and no way to access your information.</p>
+    </section>
+
+    <section>
+      <h2>What data we do NOT collect</h2>
+      <ul>
+        <li>No name, email address, or any account information</li>
+        <li>No usage analytics or crash reports sent to us</li>
+        <li>No advertising identifiers or tracking</li>
+        <li>No location data</li>
+        <li>No contacts or any other device data</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Notifications</h2>
+      <p>Ease can send you a daily reminder to log your drinks. These are <strong>local notifications</strong> — they are scheduled entirely on your device and no data is sent to any server to make them work. You can disable notifications at any time in your phone's Settings app or within the app itself.</p>
+    </section>
+
+    <section>
+      <h2>In-app purchases</h2>
+      <p>The optional supporter unlock (€3.99) is processed entirely by Google Play / Apple App Store. We receive a notification that a purchase was made, but we do not receive or store your payment details. All payment data is handled by Google or Apple under their own privacy policies.</p>
+    </section>
+
+    <section>
+      <h2>Third-party services</h2>
+      <p>Ease does not integrate any third-party analytics, advertising, or tracking SDKs. The only third-party involvement is Google Play and the Apple App Store for app distribution and in-app purchases, which are governed by their own privacy policies.</p>
+    </section>
+
+    <section>
+      <h2>Your rights (GDPR)</h2>
+      <p>If you are in the European Union or European Economic Area, you have the right to access, correct, and delete your data. Since all data is stored locally on your device, you can:</p>
+      <ul>
+        <li>View your data directly within the app at any time</li>
+        <li>Delete all data by uninstalling the app — this removes everything permanently</li>
+      </ul>
+      <p>There is no account to delete and no server-side data to request removal of.</p>
+    </section>
+
+    <section>
+      <h2>Children's privacy</h2>
+      <p>Ease is intended for adults aged 18 and over. We do not knowingly collect any data from children. If you believe a child is using this app inappropriately, please contact us at <a href="mailto:angelobendrot@gmail.com">angelobendrot@gmail.com</a>.</p>
+    </section>
+
+    <section>
+      <h2>Changes to this policy</h2>
+      <p>If we update this privacy policy, we will update the "last updated" date at the top of this page. We will not notify users by email (since we don't collect email addresses), so we encourage you to check this page occasionally.</p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Questions or concerns? Email us at <a href="mailto:angelobendrot@gmail.com">angelobendrot@gmail.com</a>.</p>
+    </section>
+
+  </div>
+</div>
+
+<footer>
+  <div class="container" style="max-width:1120px">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <div class="logo-bars">
+            <div class="logo-bar" style="width:14px"></div>
+            <div class="logo-bar" style="width:10px"></div>
+            <div class="logo-bar" style="width:6px"></div>
+          </div>
+        </div>
+        <span class="footer-name">Ease</span>
+        <span class="footer-copy">© 2026</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="mailto:angelobendrot@gmail.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
